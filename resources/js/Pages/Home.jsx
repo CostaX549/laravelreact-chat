@@ -30,6 +30,20 @@ import AttachmentPreviewModal from '@/Components/App/AttachmentPreviewModal';
         }
     }
 
+    const messageDeleted = ({message}) => {
+        if(selectedConversation && selectedConversation.is_group && selectedConversation.id == message.group_id) {
+            setLocalMessages((prevMessages) => {
+                return prevMessages.filter((m) => m.id !== message.id)
+            })
+        }
+
+        if(selectedConversation && selectedConversation.is_user && (selectedConversation.id == message.sender_id || selectedConversation.id == message.receiver_id)) {
+            setLocalMessages((prevMessages) => {
+                return prevMessages.filter((m) => m.id !== message.id)
+            })
+        }
+    }
+
     const loadMoreMessages = useCallback(() => {
         if(noMoreMessages) {
             return
@@ -67,17 +81,27 @@ import AttachmentPreviewModal from '@/Components/App/AttachmentPreviewModal';
             messagesCtrRef.current.scrollTop =  messagesCtrRef.current.scrollHeight;
             }
         }, 10)
-
+       
        const offCreated = on("message.created", messageCreated)
+       const offDeleted = on("message.deleted", messageDeleted)
+
+
 
        setScrollFromBottom(0)
        setNoMoreMessages(false)
+     
+      
 
        return () => {
         offCreated()
+        offDeleted()
        }
     
-    }, [selectedConversation])
+    }, [selectedConversation, on])
+
+  
+
+
 
     useEffect(() => {
         setLocalMessages(messages ? messages.data.reverse() : [])

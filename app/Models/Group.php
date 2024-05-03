@@ -20,6 +20,10 @@ class Group extends Model
         return $this->belongsToMany(User::class, "group_users");
     }
 
+    public function lastMessage() {
+        return $this->belongsTo(Message::class, "last_message_id");
+    }
+
     public function messages() {
         return $this->hasMany(Message::class);
     }

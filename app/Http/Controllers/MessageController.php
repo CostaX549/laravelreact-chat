@@ -32,9 +32,10 @@ class MessageController extends Controller
 
     public function byGroup(Group $group) {
         $messages =  Message::where("group_id", $group->id)
+       
         ->latest()
         ->paginate(10);
-
+     
         return inertia('Home', [
            'selectedConversation' => $group->toConversationArray(),
            'messages' => MessageResource::collection($messages)
@@ -44,6 +45,7 @@ class MessageController extends Controller
     public function loadOlder(Message $message) {
     if($message->group_id) {
       $messages = Message::where("created_at", "<", $message->created_at)
+      ->where("group_id", $message->group_id)
       ->latest()
       ->paginate(10);
     } else {
@@ -106,7 +108,29 @@ class MessageController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
+        // Check if the message is group message
+        $group = null;
+        $conversation = null;
+        if($message->group_id) {
+            $group = Group::where("last_message_id", $message->id)->first();
+          
+        } else {
+            $conversation = Conversation::where("last_message_id", $message->id)->first();
+
+            
+        }
+
         $message->delete();
-        return response('', 204);
+       $lastMessage = null;
+        if($group) {
+            $group = Group::find($group->id);
+            $lastMessage = $group->lastMessage;
+        } else if($conversation) {
+          $conversation = Conversation::find($conversation->id);
+          $lastMessage = $conversation->lastMessage;
+        }
+
+      
+        return response()->json(['message' => $lastMessage ? new MessageResource($lastMessage) : null]);
     }
 }
