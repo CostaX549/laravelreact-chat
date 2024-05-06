@@ -11,6 +11,10 @@ class GroupController extends Controller
 {
     
 
+    public function index() {
+        
+    }
+
    
     /**
      * Store a newly created resource in storage.

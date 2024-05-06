@@ -4,34 +4,48 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import UserAvatar from '@/Components/App/UserAvatar';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
+        avatar: null,
         email: user.email,
+        _method: "PATCH"
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'));
+        post(route('profile.update'));
     };
 
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
+                <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">Informações do Perfil</h2>
 
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                    Update your account's profile information and email address.
+                Atualize as informações do perfil da sua conta e o endereço de email.
                 </p>
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
+                <UserAvatar user={user} profile={true}/>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="avatar" value="Foto de Perfil" />
+
+                    <input id="avatar" type="file" class="file-input file-input-bordered file-input-primary w-full max-w-xs" onChange={(e) => setData("avatar", e.target.files[0]) }/>
+                    <p className="mt-1 text-gray-400">Please upload square Picture. Ex: 512px&times;512px</p>
+                  
+
+                    <InputError className="mt-2" message={errors.avatar} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="name" value="Nome" />
 
                     <TextInput
                         id="name"
@@ -85,7 +99,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                 )}
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    <PrimaryButton disabled={processing}>Salvar</PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
@@ -94,7 +108,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">Salvo.</p>
                     </Transition>
                 </div>
             </form>
