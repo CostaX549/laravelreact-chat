@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 
 Route::middleware(['auth', 'verified', 'active'])->group(function() {
     Route::get('/conversations', [HomeController::class, 'home'])->name('dashboard');
-    
+    Route::get('/equipes', [GroupController::class, 'index'])->name('home');
     Route::get('user/{user}', [MessageController::class, 'byUser'])->name('chat.user');
     Route::get('group/{group}', [MessageController::class, 'byGroup'])->name('chat.group');
     Route::post('/message', [MessageController::class, 'store'])->name('message.store');

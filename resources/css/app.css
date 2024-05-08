@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 #app {
     height: 100vh;
 }
@@ -106,3 +107,4 @@
 .chat-message-content pre code {
   background-color: transparent;
 }
+

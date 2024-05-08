@@ -1,7 +1,7 @@
 import React from 'react'
 import { Article } from '@/Components'
 
-import './blog.css'
+
 
 const Blog = () => {
   return (

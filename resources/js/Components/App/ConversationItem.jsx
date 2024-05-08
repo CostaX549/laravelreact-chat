@@ -40,7 +40,7 @@ const ConversationItem = ({conversation, selectedConversation = null, online = n
        {conversation.is_user && (
         <UserAvatar user={conversation} online={online} />
        )}
-       {conversation.is_group && <GroupAvatar />}
+       {conversation.is_group && <GroupAvatar  />}
        <div
         className={
             `flex-1 text-xs max-w-full overflow-hidden ` +

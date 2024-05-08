@@ -1,5 +1,6 @@
 
 
+import GroupItem from '@/Components/App/GroupItem';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 
@@ -9,22 +10,22 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
     return (
      
-<>
+<div className="overflow-auto">
  
-        {groups.length > 0 && (
-            <div className="flex-1 flex flex-col">
-                <div ref={loadMoreIntersect}></div>
-                {groups.map((message) => (
-                   <MessageItem
-                    key={message.id}
-                    message={message}
-                    attachmentClick={onAttachmentClick}
-                   />
+        {groups.data.length > 0 && (
+         <>
+           <div className="flex  flex-wrap gap-4 m-5 mr-2">
+                {groups.data.map((group) => (
+                   
+                   <GroupItem group={group} />
+                  
+                   
                 ))}
-            </div>
+                 </div>
+         </>
         )}
 
-    </>
+</div>
 
 
 
@@ -32,7 +33,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
     );
 }
 
-Groups.layout = (page) => {
+Grupos.layout = (page) => {
     return (
         
         <AuthenticatedLayout
@@ -40,10 +41,10 @@ Groups.layout = (page) => {
     
         
         >
-            {children}
+            {page}
         </AuthenticatedLayout>
         
     )
 }
 
-export default Home;
+export default Grupos;

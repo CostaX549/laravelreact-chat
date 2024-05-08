@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGroupRequest;
 use App\Http\Requests\UpdateGroupRequest;
+use App\Http\Resources\GroupResource;
 use App\Jobs\DeleteGroupJob;
 use App\Models\Group;
 
@@ -12,7 +13,10 @@ class GroupController extends Controller
     
 
     public function index() {
-        
+     
+        return inertia('Grupos', [
+            'groups' => GroupResource::collection(auth()->user()->groups)
+        ]);
     }
 
    
