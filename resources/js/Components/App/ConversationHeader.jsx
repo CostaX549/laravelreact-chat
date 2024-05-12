@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react"
-import { ArrowLeftIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { ArrowLeftIcon, BookmarkIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid"
 import UserAvatar from "./UserAvatar"
 import GroupAvatar from "./GroupAvatar"
 import GroupDescriptionPopover from "./GroupDescriptionPopover"
@@ -52,6 +52,14 @@ const ConversationHeader = ({ selectedConversation }) => {
         </div>
         {selectedConversation.is_group && (
            <div className="flex gap-3">
+             <div className="tooltip tooltip-left" data-tip="Tarefas">
+              <Link   href={
+        route("group.tarefas", selectedConversation)
+       
+   }   className="text-gray-400 hover:text-gray-200">
+                   <BookmarkIcon className="w-4" />
+                  </Link>     
+              </div>  
               <GroupDescriptionPopover 
                 description={selectedConversation.description}
               />
@@ -70,6 +78,7 @@ const ConversationHeader = ({ selectedConversation }) => {
                    <TrashIcon className="w-4" />
                   </button>     
               </div>  
+             
               </>
               )}
            </div>

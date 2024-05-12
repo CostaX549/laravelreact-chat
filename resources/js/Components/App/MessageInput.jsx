@@ -11,7 +11,7 @@ import NewMessageInput from "./NewMessageInput"
 import EmojiPicker from "emoji-picker-react";
 
 import { Popover, Transition } from "@headlessui/react";
-import axios from "axios";
+
 import AttachmentPreview from "./AttachmentPreview";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import { isAudio, isImage } from "@/helpers";

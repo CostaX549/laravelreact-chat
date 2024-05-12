@@ -1,20 +1,57 @@
-import { PaperClipIcon, ArrowDownTrayIcon, PlayCircleIcon } from "@heroicons/react/24/solid";
+import { PaperClipIcon, ArrowDownTrayIcon, PlayCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import { isAudio, isImage, isPDF, isPreviewable, isVideo } from "@/helpers";
+import { useState, useEffect } from "react";
+import { useEventBus } from "@/EventBus";
 
-const MessageAttachments = ({ attachments, attachmentClick }) => {
+const MessageAttachments = ({ attachments, attachmentClick, justify = "end", editing = false }) => {
+  const [attachmentsList, setAttachmentsList] = useState(attachments);
+  const { on } = useEventBus();
+
+
+  useEffect(() => {
+    on('attachments', (data) => {
+   
+        setAttachmentsList(data.attachments)
+    });
+}, [on]);
+
+  const handleDeleteAttachment = (attachmentId) => {
+ 
+
+  
+      axios.delete(route("tarefa.attachment.delete", attachmentId))
+      .then((res) => {
+     
+        const updatedAttachments = attachmentsList.filter(attachment => attachment.id !== attachmentId);
+        setAttachmentsList(updatedAttachments);
+       
+         
+      })
+      .catch((err) => {
+          console.error(err)
+      })
+  
+};
     return (
        <>
-         {attachments.length > 0 && (
-            <div className="mt-2 flex flex-wrap justify-end gap-1">
-             {attachments.map((attachment, ind) => (
-              
+        {attachmentsList.length > 0 && (
+            <div className={`mt-2 flex flex-wrap justify-${justify} gap-1`}>
+            {attachmentsList.map((attachment, ind) => (
+            
               <div
-              onClick={(ev) => attachmentClick(attachments, ind)}
+              
               key={attachment.id}
               className={`group flex flex-col items-center justify-center text-gray-500 relative cursor-pointer `
               + (isAudio(attachment) ? "w-84" : "w-32 aspect-square bg-blue-100")
             }
               >
+                  {editing && (
+                <XCircleIcon   onClick={() => handleDeleteAttachment(attachment.id)}    className="z-10 opacity-100 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100  absolute right-[-10px] top-[-20px] cursor-pointer" />
+            )}
+            <div onClick={(ev) => attachmentClick(attachments, ind)}>
+                {!editing && (
+
+              <>
                  {!isAudio(attachment) && (
                     <a
                     onClick={(ev) => ev.stopPropagation()}
@@ -24,7 +61,9 @@ const MessageAttachments = ({ attachments, attachmentClick }) => {
                     >
                      <ArrowDownTrayIcon className="w-4 h-4" />
                     </a>
-                 )}    
+                 )}  
+                 </>  
+                )}
                 {isImage(attachment) && (
                     <img 
                     src={attachment.url} 
@@ -64,11 +103,11 @@ const MessageAttachments = ({ attachments, attachmentClick }) => {
                 >
                   <PaperClipIcon className="w-10 h-10 mb-3" />
 
-                  <small className="text-center">{attachment.name}</small>
+                  <small className="text-center truncate max-w-[100px]">{attachment.name}</small>
                 </a>
                 )}
               </div>
-            
+              </div>
               
              ))} 
             </div>
