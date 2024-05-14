@@ -4,8 +4,8 @@ import { Link } from '@inertiajs/react';
 
 const GroupItem = ({ group }) => {
     return (
-        <div className="card w-[455px]  bg-base-100 shadow-xl">
-            <figure class="m-4"><GroupAvatar size={32} iconSize={12} /></figure> {/* Define o tamanho do avatar aqui */}
+        <div className="card w-[455px]  bg-base-100 shadow-xl" >
+            <figure className="m-4"><GroupAvatar size={32} iconSize={12} /></figure> {/* Define o tamanho do avatar aqui */}
             <div className="card-body">
                 <h2 className="card-title">{group.name}</h2>
                 <p>{group.description ? group.description : "No Description"}</p>

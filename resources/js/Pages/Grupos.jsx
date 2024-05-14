@@ -17,7 +17,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
            <div className="flex  flex-wrap gap-4 m-5 mr-2">
                 {groups.data.map((group) => (
                    
-                   <GroupItem group={group} />
+                   <GroupItem group={group} key={group.id} />
                   
                    
                 ))}
